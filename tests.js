@@ -37,7 +37,7 @@ describe('Order Book', () => {
       ])
     })
 
-    it('4. fulfills an order and removes the matching order when the book contains a matching order of the same quantity', () => {
+    it.only('4. fulfills an order and removes the matching order when the book contains a matching order of the same quantity', () => {
       const existingBook = [{ type: 'buy', quantity: 10, price: 6150 }, { type: 'sell', quantity: 12, price: 5950 }]
       const incomingOrder = { type: 'sell', quantity: 10, price: 6150 }
 
