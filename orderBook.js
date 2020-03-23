@@ -3,40 +3,37 @@
 const reconcileOrder = (existingBook,incomingOrder) => {
   
   let updatedBook = []
+  for (let i = 0; i < existingBook.length; i++){
+    updatedBook.push(existingBook[i])
+  }
+
+  if (existingBook.length === 0) {
+    updatedBook.push(incomingOrder)
+  }
 
   for (let i = 0; i < existingBook.length; i++) {
     if (incomingOrder.type !== existingBook[i].type) {
-      if (existingBook[i].type === 'sell' && incomingOrder.price >= existingBook[i].price) {
-        if (existingBook[i].quantity >= incomingOrder.quantity) {
+      if (incomingOrder.price === existingBook[i].price) {
+        if (existingBook[i].quantity === incomingOrder.quantity) {
           existingBook[i].quantity -= incomingOrder.quantity
           incomingOrder.quantity = 0
+          updatedBook.splice(i, 1)
+          break
         }
         else {
           incomingOrder.quantity -= existingBook[i].quantity
-          existingBook.slice[i]
-          updatedBook.push(existingBook)
-        }
+          existingBook.splice(i,1)
+          updatedBook.push(existingBook[i])
+        } 
+      } else {
+        updatedBook.push(incomingOrder)
       }
-      else if (existingBook[i].type === 'buy' && incomingOrder.price <= existingBook[i].price) {
-        if (existingBook[i].quantity >= incomingOrder.quantity) {
-          existingBook[i].quantity -= incomingOrder.quantity
-          incomingOrder.quantity = 0
-        }
-        else {
-          incomingOrder.quantity -= existingBook[i].quantity
-          existingBook.slice[i]
-          updatedBook.push(existingBook)
-
-        }
-      }
+      
+    } else if (existingBook[i].type === incomingOrder.type) {
+      updatedBook.push(incomingOrder)
     }
   }
-  if (incomingOrder.quantity > 0) {
-    updatedBook.push(incomingOrder)
-  }
   
-
-  console.log(updatedBook)
   return updatedBook
 }
 
