@@ -1,42 +1,39 @@
+const reconcileOrder = (existingBook, incomingOrder) => {
 
+  let updatedBook = [...existingBook]
+  let newOrder = { ...incomingOrder }
 
-const reconcileOrder = (existingBook,incomingOrder) => {
-  
-  let updatedBook = []
-  for (let i = 0; i < existingBook.length; i++){
-    updatedBook.push(existingBook[i])
-  }
+  if (updatedBook.length === 0) return [newOrder]
 
-  if (existingBook.length === 0) {
-    updatedBook.push(incomingOrder)
-  }
+  for (let i = 0; i < updatedBook.length; i++) {
+    if (isOrderMatch(updatedBook[i], newOrder)) {
 
-  for (let i = 0; i < existingBook.length; i++) {
-    if (incomingOrder.type !== existingBook[i].type) {
-      if (incomingOrder.price === existingBook[i].price) {
-        if (existingBook[i].quantity === incomingOrder.quantity) {
-          existingBook[i].quantity -= incomingOrder.quantity
-          incomingOrder.quantity = 0
-          updatedBook.splice(i, 1)
-          break
+      if (updatedBook[i].quantity > newOrder.quantity) {
+        updatedBook[i].quantity -= newOrder.quantity
+        if (updatedBook[i].quantity >= newOrder.quantity) {
+          const tempOrder = updatedBook.splice(i, 1)
+          updatedBook = updatedBook.concat(tempOrder)
         }
-        else {
-          incomingOrder.quantity -= existingBook[i].quantity
-          existingBook.splice(i,1)
-          updatedBook.push(existingBook[i])
-        } 
+
+        return updatedBook.filter(order => order.quantity)
       } else {
-        updatedBook.push(incomingOrder)
+        newOrder.quantity -= updatedBook[i].quantity
+        updatedBook[i].quantity = 0
       }
-      
-    } else if (existingBook[i].type === incomingOrder.type) {
-      updatedBook.push(incomingOrder)
     }
   }
-  
-  return updatedBook
+
+  updatedBook.push(newOrder)
+
+  return updatedBook.filter(order => order.quantity)
+
 }
 
-
+function isOrderMatch(existingOrder, newOrder) {
+  if (existingOrder.type !== newOrder.type) {
+    return newOrder.type === 'sell' ? existingOrder.price >= newOrder.price : existingOrder.price <= newOrder.price
+  }
+  return false
+}
 
 module.exports = reconcileOrder

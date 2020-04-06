@@ -23,7 +23,7 @@ describe('Order Book', () => {
         { type: 'sell', quantity: 10, price: 6150 },
         { type: 'sell', quantity: 12, price: 6000 }
       ])
-    }) 
+    })
 
     it('3. adds an order to the book when the book has a corresponding order type but it does not match', () => {
       const existingBook = [{ type: 'buy', quantity: 10, price: 6000 }]
@@ -46,13 +46,13 @@ describe('Order Book', () => {
       expect(updatedBook).to.deep.equal([{ type: 'sell', quantity: 12, price: 5950 }])
     })
 
-    it.only('5. fulfills an order and reduces the matching order when the book contains a matching order of a larger quantity', () => {
+    it('5. fulfills an order and reduces the matching order when the book contains a matching order of a larger quantity', () => {
       const existingBook = [{ type: 'buy', quantity: 15, price: 6150 }, { type: 'sell', quantity: 12, price: 6950 }]
       const incomingOrder = { type: 'sell', quantity: 10, price: 6150 }
 
       const updatedBook = reconcileOrder(existingBook, incomingOrder)
 
-      expect(updatedBook).to.deep.equal([{ type: 'sell', quantity: 12, price: 6950 }, { type: 'buy', quantity: 5, price: 6150 }])
+      expect(updatedBook).to.deep.equal([{ type: 'buy', quantity: 5, price: 6150 }, { type: 'sell', quantity: 12, price: 6950 }])
     })
 
     it('6. partially fulfills an order, removes the matching order and adds the remainder of the order to the book when the book contains a matching order of a smaller quantity', () => {
@@ -91,7 +91,7 @@ describe('Order Book', () => {
       expect(updatedBook).to.deep.equal([{ type: 'sell', quantity: 12, price: 6950 }, { type: 'sell', quantity: 5, price: 6150 }])
     })
 
-    it.skip('10. Extra Credit: it fulfills a mismatched order when both parties benefit', () => {
+    it('10. Extra Credit: it fulfills a mismatched order when both parties benefit', () => {
       const existingBook = [{ type: 'buy', quantity: 15, price: 6000 }, { type: 'sell', quantity: 12, price: 6950 }]
       const incomingOrder = { type: 'sell', quantity: 15, price: 5900 }
 
@@ -100,7 +100,7 @@ describe('Order Book', () => {
       expect(updatedBook).to.deep.equal([{ type: 'sell', quantity: 12, price: 6950 }])
     })
 
-    it.skip('11. Extra Credit: it does not fulfill a mismatched order when it does not benefit both parties', () => {
+    it('11. Extra Credit: it does not fulfill a mismatched order when it does not benefit both parties', () => {
       const existingBook = [{ type: 'buy', quantity: 15, price: 5900 }, { type: 'sell', quantity: 12, price: 6950 },]
       const incomingOrder = { type: 'sell', quantity: 15, price: 6000 }
 
